@@ -1,7 +1,6 @@
 ## First of all I will install all the packages necessaries for treating this data.
 
 install.packages("tidyverse")
-install.packages("ggplot2")
 install.packages("lubridate")
 install.packages("dplyr")
 install.packages("readr")
@@ -13,7 +12,6 @@ install.packages("tidyr")
 ## I will load the libraries.
 
 library(tidyverse)
-library(ggplot2)
 library(lubridate)
 library(dplyr)
 library(readr)
@@ -24,175 +22,73 @@ library(tidyr)
 
 ## I am importing all the .csv files into my R project.
 
-tripdata_202201 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202201-divvy-tripdata.csv")
-tripdata_202202 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202202-divvy-tripdata.csv")
-tripdata_202203 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202203-divvy-tripdata.csv")
-tripdata_202204 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202204-divvy-tripdata.csv")
-tripdata_202205 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202205-divvy-tripdata.csv")
-tripdata_202206 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202206-divvy-tripdata.csv")
-tripdata_202207 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202207-divvy-tripdata.csv")
-tripdata_202208 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202208-divvy-tripdata.csv")
-tripdata_202209 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202209-divvy-tripdata.csv")
-tripdata_202210 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202210-divvy-tripdata.csv")
-tripdata_202211 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202211-divvy-tripdata.csv")
-tripdata_202212 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202212-divvy-tripdata.csv")
+data_202201 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202201-divvy-tripdata.csv")
+data_202202 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202202-divvy-tripdata.csv")
+data_202203 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202203-divvy-tripdata.csv")
+data_202204 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202204-divvy-tripdata.csv")
+data_202205 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202205-divvy-tripdata.csv")
+data_202206 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202206-divvy-tripdata.csv")
+data_202207 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202207-divvy-tripdata.csv")
+data_202208 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202208-divvy-tripdata.csv")
+data_202209 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202209-divvy-tripdata.csv")
+data_202210 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202210-divvy-tripdata.csv")
+data_202211 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202211-divvy-tripdata.csv")
+data_202212 <- read.csv("C:/Users/david/OneDrive/Escritorio/2022_monthly_cyclistic_trips/202212-divvy-tripdata.csv")
 
 
 ## I want to check all the data types and structure to make sure everything is in the correct format.
 
-str(tripdata_202201)
-str(tripdata_202202)
-str(tripdata_202203)
-str(tripdata_202204)
-str(tripdata_202205)
-str(tripdata_202206)
-str(tripdata_202207)
-str(tripdata_202208)
-str(tripdata_202209)
-str(tripdata_202210)
-str(tripdata_202211)
-str(tripdata_202212)
+str(data_202201)
+str(data_202202)
+str(data_202203)
+str(data_202204)
+str(data_202205)
+str(data_202206)
+str(data_202207)
+str(data_202208)
+str(data_202209)
+str(data_202210)
+str(data_202211)
+str(data_202212)
 
 
-## I realized some formats are not right and I needed to change them to the right format.
-## From char to datetime
+## I want to combine all the data in one. "total_trips_2022".
 
-total_trips[['started_at']] <- ymd_hms(total_trips[['started_at']])
-total_trips[['ended_at']] <- ymd_hms(total_trips[['ended_at']])
+total_trips_2022 <- rbind(data_202201,data_202202,data_202203,data_202204,data_202205,data_202206,data_202207,data_202208,data_202209,data_202210,data_202211,data_202212)
 
 
-## I want to combine all the data in one. "total_trips".
+## Change 'started_at' and 'ended_at' datetime.
 
-total_trips <- bind_rows(tripdata_202201,tripdata_202202,tripdata_202203,tripdata_202204,tripdata_202205,tripdata_202206,tripdata_202207,tripdata_202208,tripdata_202209,tripdata_202210,tripdata_202211,tripdata_202212) 
-
-
-## Remove some non needed columns.
-
-total_trips <- total_trips %>%
-  select(-c(start_lat:end_lng))
-
-
-#Rename columns to make everything more understandable.
-
-total_trips <- total_trips %>%
-  rename(ride_type = rideable_type, 
-         start_time = started_at,
-         end_time = ended_at,
-         customer_type = member_casual)
+total_trips_2022[['started_at']] <- ymd_hms(total_trips_2022[['started_at']])
+total_trips_2022[['ended_at']] <- ymd_hms(total_trips_2022[['ended_at']])
 
 
 ## Create new column for day of the week the trip started to use it later on the visualization.
 
-total_trips$day_of_the_week <- format(as.Date(total_trips$start_time),'%a')
+total_trips_2022$day_of_the_week <- format(as.Date(total_trips_2022$started_at),'%a')
 
 
 ## Create new column for month the trip started to use it later on the visualization.
 
-total_trips$month <- format(as.Date(total_trips$start_time),'%b_%y')
- 
-
-## Create new column for time the trip started to use it later on the visualization.
-
-total_trips$time <- format(total_trips$start_time, format = "%H:%M")
+total_trips_2022$month <- format(as.Date(total_trips_2022$started_at),'%b_%y')
 
 
-## Transform time into the right format for visualization purposes.
+## Create new column for time the trip started.
 
-total_trips$time <- as.POSIXct(total_trips$time, format = "%H:%M")
+total_trips_2022$trip_start_time <- format(total_trips_2022$started_at, format = "%H:%M")
+
+
+## Transform trip_start_time to the right format.
+
+total_trips_2022$trip_start_time <- as.POSIXct(total_trips_2022$started_at, format = "%H:%M")
 
 
 ## Create new column for trip duration in minutes.
 
-total_trips$trip_duration <- (as.double(difftime(total_trips$end_time, total_trips$start_time)))/60
+total_trips_2022$duration_trip <- difftime(total_trips_2022$ended_at, total_trips_2022$started_at, units="mins")
 
 
-## Checking if there are trip duration rows with negative times and Test rides.
+## Let´s export the total_trip_2022.csv dataframe.
 
-nrow(subset(total_trips,trip_duration < 0))
+write.csv(total_trips_2022, "C:\\Users\\david\\OneDrive\\Escritorio\\2022_monthly_cyclistic_trips\\total_trips_2022.csv", row.names=FALSE)
 
-nrow(subset(total_trips, start_station_name %like% "TEST"))
-nrow(subset(total_trips, start_station_name %like% "test"))
-nrow(subset(total_trips, start_station_name %like% "Test"))
-
-
-## Deleting negative rows and Test rides creating a new variable out of the main "all_trips" one.
-
-total_trips_v2 <- total_trips[!(total_trips$trip_duration < 0),]
-
-total_trips_v2 <- total_trips_v2[!((total_trips_v2$start_station_name %like% "TEST" | total_trips_v2$start_station_name %like% "Test")),]
-
-
-## Order days of the week and months for visualization.
-
-total_trips_v2$day_of_the_week <- ordered(total_trips_v2$day_of_the_week, levels=c("lu.", "ma.", "mi.", "ju.", "vi.", "sá.", "do."))
-total_trips_v2$month <- ordered(total_trips_v2$month, levels=c("ene._22", "feb._22", "mar._22", "abr._22", "may._22", "jun._22", "jul._22", "ago._22", "sep._22", "oct._22", "nov._22", "dic._22"))
-
-
-## Group and visualize the relation between Total trips by customer type Vs. Day of the week.
-
-total_trips_v2 %>%  
-  group_by(customer_type, day_of_the_week) %>% 
-  summarise(number_of_rides = n()) %>% 
-  arrange(customer_type, day_of_the_week)  %>% 
-  ggplot(aes(x = day_of_the_week, y = number_of_rides, fill = customer_type)) +
-  labs(title ="Total trips by customer type Vs. Day of the week") +
-  geom_col(width=0.5, position = position_dodge(width=0.5)) +
-  scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
-
-
-## Group and visualize the relation between Total trips by customer type Vs. Month.
-
-total_trips_v2 %>%  
-  group_by(customer_type, month) %>% 
-  summarise(number_of_rides = n()) %>% 
-  arrange(customer_type, month)  %>% 
-  ggplot(aes(x = month, y = number_of_rides, fill = customer_type)) +
-  labs(title ="Total trips by customer type Vs. Month") +
-  theme(axis.text.x = element_text(angle = 30)) +
-  geom_col(width=0.5, position = position_dodge(width=0.5)) +
-  scale_y_continuous(labels = function(x) format(x, scientific = FALSE))
-
-
-## Group and visualize the Average trip duration by customer type Vs. Day of the week.
-
-total_trips_v2 %>%  
-  group_by(customer_type, day_of_the_week) %>% 
-  summarise(average_trip_duration = mean(trip_duration)) %>%
-  ggplot(aes(x = day_of_the_week, y = average_trip_duration, fill = customer_type)) +
-  geom_col(width=0.5, position = position_dodge(width=0.5)) + 
-  labs(title ="Average trip duration by customer type Vs. Day of the week")
-
-
-## Group and visualize the Average trip duration by customer type Vs. Month.
-
-total_trips_v2 %>%  
-  group_by(customer_type, month) %>% 
-  summarise(average_trip_duration = mean(trip_duration)) %>%
-  ggplot(aes(x = month, y = average_trip_duration, fill = customer_type)) +
-  geom_col(width=0.5, position = position_dodge(width=0.5)) + 
-  labs(title ="Average trip duration by customer type Vs. Month") +
-  theme(axis.text.x = element_text(angle = 30))
-
-
-## Group and visualize the Demand over 24 hours of a day.
-
-total_trips_v2 %>%  
-  group_by(customer_type, time) %>% 
-  summarise(number_of_trips = n()) %>%
-  ggplot(aes(x = time, y = number_of_trips, color = customer_type, group = customer_type)) +
-  geom_line() +
-  scale_x_datetime(date_breaks = "1 hour", minor_breaks = NULL,
-                   date_labels = "%H:%M", expand = c(0,0)) +
-  theme(axis.text.x = element_text(angle = 90)) +
-  labs(title ="Demand over 24 hours of a day", x = "Time of the day")
-
-
-## Group and visualize the Ride type Vs. Number of trips.
-
-total_trips_v2 %>%
-  group_by(ride_type, customer_type) %>%
-  summarise(number_of_trips = n()) %>%  
-  ggplot(aes(x= ride_type, y=number_of_trips, fill= customer_type))+
-  geom_bar(stat='identity') +
-  scale_y_continuous(labels = function(x) format(x, scientific = FALSE)) +
-  labs(title ="Ride type Vs. Number of trips")
